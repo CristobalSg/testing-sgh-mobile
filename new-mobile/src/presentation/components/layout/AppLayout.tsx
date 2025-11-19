@@ -33,8 +33,9 @@ export default function AppLayout({
 
       {/* Contenido principal */}
       <main
-        className={`ios-scroll mx-auto flex w-full max-w-md flex-1 overflow-y-auto px-4 pt-20 ${className}`}
+        className={`ios-scroll mx-auto flex w-full max-w-md flex-1 flex-col overflow-y-auto px-4 ${className}`}
         style={{
+          paddingTop: "calc(80px + env(safe-area-inset-top, 0px))",
           paddingBottom: showBottomNav
             ? "calc(120px + env(safe-area-inset-bottom, 0px))"
             : "env(safe-area-inset-bottom, 0px)",
