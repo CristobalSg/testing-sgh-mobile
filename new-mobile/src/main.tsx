@@ -7,6 +7,7 @@ import App from "./App.tsx"
 declare global {
   interface Window {
     __sghAppHeightSetup?: boolean
+    __sghPreventZoom?: boolean
   }
 }
 
@@ -30,11 +31,29 @@ const setupAppHeight = () => {
   window.visualViewport?.addEventListener("scroll", setAppHeight)
 }
 
+const disablePinchZoom = () => {
+  if (window.__sghPreventZoom) return
+  window.__sghPreventZoom = true
+  const preventPinch = (event: TouchEvent) => {
+    if (event.touches.length > 1) {
+      event.preventDefault()
+    }
+  }
+  const preventGesture = (event: Event) => {
+    event.preventDefault()
+  }
+  document.addEventListener("touchmove", preventPinch, { passive: false })
+  document.addEventListener("gesturestart", preventGesture)
+  document.addEventListener("gesturechange", preventGesture)
+  document.addEventListener("gestureend", preventGesture)
+}
+
 if ("serviceWorker" in navigator) {
   registerSW({ immediate: true })
 }
 
 setupAppHeight()
+disablePinchZoom()
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
